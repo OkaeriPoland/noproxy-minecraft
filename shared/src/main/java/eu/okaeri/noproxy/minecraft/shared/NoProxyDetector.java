@@ -46,12 +46,12 @@ public abstract class NoProxyDetector {
             return false;
         }
 
-        boolean swear = addressInfo.getSuggestions().isBlock();
-        if (swear) {
+        boolean block = addressInfo.getSuggestions().isBlock();
+        if (block) {
             this.info("Zablokowano adres IP '" + ip + "' [" + addressInfo.getGeneral().getCountry() + ", AS" + addressInfo.getGeneral().getAsn() + "]");
         }
 
-        return swear;
+        return block;
     }
 
     public abstract void warning(String message);
