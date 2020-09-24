@@ -1,0 +1,5 @@
+name: NoProxy
+version: ${project.version}-git-${git.commit.id.abbrev}
+main: eu.okaeri.noproxy.minecraft.bungee.NoProxyBungeePlugin
+description: 'OK! No.Proxy Bukkit Plugin'
+author: Daffit

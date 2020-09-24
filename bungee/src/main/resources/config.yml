@@ -1,0 +1,24 @@
+################################################################
+#                                                              #
+#    OK! No.Proxy Minecraft                                    #
+#                                                              #
+#    Nie wiesz jak skonfigurować? Zerknij do dokumentacji!     #
+#    https://manager.okaeri.eu/noproxy/docs                    #
+#                                                              #
+################################################################
+
+
+# Klucz prywatny API
+token: ""
+
+# Wiadomosci
+message-prefix: "&f&lNo.Proxy&7: "
+message-player-info: |-
+  {PREFIX}&cKorzystanie z serwerow VPN lub proxy jest zabronione na tym serwerze.
+  &cJesli uwazasz to za blad, skontaktuj sie z administracja.
+  &f
+  &cPomoc: &ehttps://example.com/forum
+
+# Biala lista (wpisane nicki lub ip nie beda blokowane)
+white-list:
+  - 127.0.0.1
