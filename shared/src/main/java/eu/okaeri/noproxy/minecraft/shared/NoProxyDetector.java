@@ -26,6 +26,7 @@ import eu.okaeri.noproxy.client.info.AddressInfo;
 public abstract class NoProxyDetector {
 
     private final NoProxyApiContext context;
+    private final boolean debug = Boolean.getBoolean("noproxyDebug");
 
     public NoProxyDetector(NoProxyApiContext context) {
         this.context = context;
@@ -42,7 +43,8 @@ public abstract class NoProxyDetector {
             addressInfo = AddressInfo.get(this.context, ip);
         } catch (ApiException exception) {
             ApiError apiError = exception.getApiError();
-            this.warning("Blad komunikacji z API No.Proxy: " + apiError.getType() + ", " + apiError.getMessage());
+            this.warning("Blad komunikacji z API No.Proxy: " + exception.getMessage());
+            if (this.debug) exception.printStackTrace();
             return false;
         }
 
