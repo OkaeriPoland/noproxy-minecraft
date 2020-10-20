@@ -20,6 +20,7 @@ package eu.okaeri.noproxy.minecraft.bungee;
 
 import com.google.common.io.ByteStreams;
 import eu.okaeri.noproxy.client.NoProxyApiContext;
+import eu.okaeri.noproxy.minecraft.shared.NoProxyWebhook;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -27,6 +28,8 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class NoProxyBungeePlugin extends Plugin {
@@ -75,6 +78,33 @@ public class NoProxyBungeePlugin extends Plugin {
 
         // create noproxy
         this.noproxy = new NoProxyBungee(this);
+
+        // webhook config
+        @SuppressWarnings("unchecked") List<Map<String, Object>> webhooks = (List<Map<String, Object>>) config.getList("webhooks");
+        for (Map<String, Object> webhook : webhooks) {
+            NoProxyWebhook noProxyWebhook = new NoProxyWebhook();
+            Object url = webhook.get("url");
+            if (url == null) {
+                this.getLogger().log(Level.WARNING, "Jeden lub więcej webhooków nie ma adresu url, ignorowanie.");
+                continue;
+            }
+            noProxyWebhook.setUrl(String.valueOf(url));
+            Object method = webhook.get("method");
+            if (method == null) {
+                this.getLogger().log(Level.INFO, "Webhook '" + url + "' nie ma zdefiniowanej metody. Przyjmowanie domyslnej wartosci: " + noProxyWebhook.getMethod());
+            } else {
+                noProxyWebhook.setMethod(String.valueOf(method));
+            }
+            Object content = webhook.get("content");
+            if (content != null) {
+                noProxyWebhook.setContent(String.valueOf(content));
+            }
+            Object blockedOnly = webhook.get("blocked-only");
+            if (blockedOnly != null) {
+                noProxyWebhook.setBlockedOnly(Boolean.parseBoolean(String.valueOf(blockedOnly)));
+            }
+            this.noproxy.addWebhook(noProxyWebhook);
+        }
 
         // custom api url
         String apiUrl = this.getConfig().getString("api-url");
