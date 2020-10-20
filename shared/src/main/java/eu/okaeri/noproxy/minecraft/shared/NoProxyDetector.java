@@ -22,10 +22,7 @@ import eu.okaeri.noproxy.client.ApiError;
 import eu.okaeri.noproxy.client.ApiException;
 import eu.okaeri.noproxy.client.NoProxyApiContext;
 import eu.okaeri.noproxy.client.info.AddressInfo;
-import eu.okaeri.noproxy.client.okhttp3.MediaType;
-import eu.okaeri.noproxy.client.okhttp3.OkHttpClient;
-import eu.okaeri.noproxy.client.okhttp3.Request;
-import eu.okaeri.noproxy.client.okhttp3.RequestBody;
+import eu.okaeri.noproxy.client.okhttp3.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -168,7 +165,10 @@ public abstract class NoProxyDetector {
         try {
             if (this.debug) this.info("Sending webhook to '" + url + "'");
             Request request = builder.build();
-            OK_HTTP_CLIENT.newCall(request).execute();
+            Response response = OK_HTTP_CLIENT.newCall(request).execute();
+            ResponseBody responseBody = response.body();
+            if (this.debug) this.info("Response body '" + url + "': " + (responseBody == null ? "null" : responseBody.string()));
+            response.close();
         }
         catch (Exception exception) {
             this.warning("Webhook (" + url + ") failed: " + exception.getMessage());
