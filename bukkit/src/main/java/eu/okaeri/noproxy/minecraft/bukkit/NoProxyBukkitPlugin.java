@@ -19,11 +19,14 @@
 package eu.okaeri.noproxy.minecraft.bukkit;
 
 import eu.okaeri.noproxy.client.NoProxyApiContext;
+import eu.okaeri.noproxy.minecraft.shared.NoProxyWebhook;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class NoProxyBukkitPlugin extends JavaPlugin {
@@ -61,6 +64,33 @@ public class NoProxyBukkitPlugin extends JavaPlugin {
 
         // create noproxy
         this.noproxy = new NoProxyBukkit(this);
+
+        // webhook config
+        @SuppressWarnings("unchecked") List<Map<String, Object>> webhooks = (List<Map<String, Object>>) config.getList("webhooks");
+        for (Map<String, Object> webhook : webhooks) {
+            NoProxyWebhook noProxyWebhook = new NoProxyWebhook();
+            Object url = webhook.get("url");
+            if (url == null) {
+                this.getLogger().log(Level.WARNING, "Jeden lub więcej webhooków nie ma adresu url, ignorowanie.");
+                continue;
+            }
+            noProxyWebhook.setUrl(String.valueOf(url));
+            Object method = webhook.get("method");
+            if (method == null) {
+                this.getLogger().log(Level.INFO, "Webhook '" + url + "' nie ma zdefiniowanej metody. Przyjmowanie domyslnej wartosci: " + noProxyWebhook.getMethod());
+            } else {
+                noProxyWebhook.setMethod(String.valueOf(method));
+            }
+            Object content = webhook.get("content");
+            if (content != null) {
+                noProxyWebhook.setContent(String.valueOf(content));
+            }
+            Object blockedOnly = webhook.get("blocked-only");
+            if (blockedOnly != null) {
+                noProxyWebhook.setBlockedOnly(Boolean.parseBoolean(String.valueOf(blockedOnly)));
+            }
+            this.noproxy.addWebhook(noProxyWebhook);
+        }
 
         // custom api url
         String apiUrl = this.getConfig().getString("api-url");

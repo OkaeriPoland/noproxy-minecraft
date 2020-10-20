@@ -37,7 +37,7 @@ public class NoProxyListener implements Listener {
         }
 
         event.registerIntent(this.plugin);
-        if (!this.noproxy.shouldBeBlocked(address)) {
+        if (!this.noproxy.shouldBeBlocked(address, name)) {
             event.completeIntent(this.plugin);
             return;
         }

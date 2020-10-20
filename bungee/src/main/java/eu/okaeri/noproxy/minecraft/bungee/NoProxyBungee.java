@@ -38,4 +38,9 @@ public class NoProxyBungee extends NoProxyDetector {
     public void info(String message) {
         this.plugin.getLogger().info(message);
     }
+
+    @Override
+    public void dispatchAsync(Runnable runnable) {
+        this.plugin.getProxy().getScheduler().runAsync(this.plugin, runnable);
+    }
 }

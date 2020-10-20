@@ -28,7 +28,7 @@ public class NoProxyListener implements Listener {
             return;
         }
 
-        if (!this.noproxy.shouldBeBlocked(address)) {
+        if (!this.noproxy.shouldBeBlocked(address, name)) {
             return;
         }
 
