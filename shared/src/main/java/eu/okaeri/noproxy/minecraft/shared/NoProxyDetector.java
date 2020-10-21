@@ -149,8 +149,8 @@ public abstract class NoProxyDetector {
         if (this.debug) this.info("Preparing webhook for " + webhook);
         Map<String, String> addressInfoMap = this.addressInfoToMap(info);
         String method = webhook.getMethod();
-        String url = this.replaceVariables(webhook.getUrl(), info, true, addressInfoMap, additionalVariables);
-        String body = this.replaceVariables(webhook.getContent(), info, false, addressInfoMap, additionalVariables);
+        String url = this.replaceVariables(webhook.getUrl(), info, true, false, addressInfoMap, additionalVariables);
+        String body = this.replaceVariables(webhook.getContent(), info, false, true, addressInfoMap, additionalVariables);
         Request.Builder builder = new Request.Builder()
                 .header("User-Agent", WEBHOOK_USER_AGENT)
                 .url(url);
@@ -195,13 +195,16 @@ public abstract class NoProxyDetector {
     }
 
     @SafeVarargs
-    private final String replaceVariables(String text, AddressInfo info, boolean urlEncode, Map<String, String>... variableSets) {
+    private final String replaceVariables(String text, AddressInfo info, boolean urlEncode, boolean quotesEscape, Map<String, String>... variableSets) {
         for (Map<String, String> variables : variableSets) {
             for (Map.Entry<String, String> entry : variables.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 if (value == null) {
                     continue;
+                }
+                if (quotesEscape) {
+                    value = value.replaceAll("\"","\\\\\"");
                 }
                 if (urlEncode) {
                     try {
