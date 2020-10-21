@@ -5,20 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>noproxy-minecraft-bungee</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <name>OK! No.Proxy Minecraft (Bungee)</name>
 
     <parent>
         <groupId>eu.okaeri</groupId>
         <artifactId>noproxy-minecraft</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>eu.okaeri</groupId>
             <artifactId>noproxy-minecraft-shared</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
