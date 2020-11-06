@@ -67,29 +67,31 @@ public class NoProxyBukkitPlugin extends JavaPlugin {
 
         // webhook config
         @SuppressWarnings("unchecked") List<Map<String, Object>> webhooks = (List<Map<String, Object>>) config.getList("webhooks");
-        for (Map<String, Object> webhook : webhooks) {
-            NoProxyWebhook noProxyWebhook = new NoProxyWebhook();
-            Object url = webhook.get("url");
-            if (url == null) {
-                this.getLogger().log(Level.WARNING, "Jeden lub więcej webhooków nie ma adresu url, ignorowanie.");
-                continue;
+        if (webhooks != null) {
+            for (Map<String, Object> webhook : webhooks) {
+                NoProxyWebhook noProxyWebhook = new NoProxyWebhook();
+                Object url = webhook.get("url");
+                if (url == null) {
+                    this.getLogger().log(Level.WARNING, "Jeden lub więcej webhooków nie ma adresu url, ignorowanie.");
+                    continue;
+                }
+                noProxyWebhook.setUrl(String.valueOf(url));
+                Object method = webhook.get("method");
+                if (method == null) {
+                    this.getLogger().log(Level.INFO, "Webhook '" + url + "' nie ma zdefiniowanej metody. Przyjmowanie domyslnej wartosci: " + noProxyWebhook.getMethod());
+                } else {
+                    noProxyWebhook.setMethod(String.valueOf(method));
+                }
+                Object content = webhook.get("content");
+                if (content != null) {
+                    noProxyWebhook.setContent(String.valueOf(content));
+                }
+                Object blockedOnly = webhook.get("blocked-only");
+                if (blockedOnly != null) {
+                    noProxyWebhook.setBlockedOnly(Boolean.parseBoolean(String.valueOf(blockedOnly)));
+                }
+                this.noproxy.addWebhook(noProxyWebhook);
             }
-            noProxyWebhook.setUrl(String.valueOf(url));
-            Object method = webhook.get("method");
-            if (method == null) {
-                this.getLogger().log(Level.INFO, "Webhook '" + url + "' nie ma zdefiniowanej metody. Przyjmowanie domyslnej wartosci: " + noProxyWebhook.getMethod());
-            } else {
-                noProxyWebhook.setMethod(String.valueOf(method));
-            }
-            Object content = webhook.get("content");
-            if (content != null) {
-                noProxyWebhook.setContent(String.valueOf(content));
-            }
-            Object blockedOnly = webhook.get("blocked-only");
-            if (blockedOnly != null) {
-                noProxyWebhook.setBlockedOnly(Boolean.parseBoolean(String.valueOf(blockedOnly)));
-            }
-            this.noproxy.addWebhook(noProxyWebhook);
         }
 
         // custom api url
